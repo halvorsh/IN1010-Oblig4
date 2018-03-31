@@ -24,7 +24,6 @@ public class Legemiddelsystem {
         lesInnFraFil("innfil.txt");
 
         while(programmetkjorer){
-
             System.out.println("\nHva vil du gjore? \n" +
                     "0: Se all data\n" +
                     "1: Legge til et nytt element\n" +
@@ -170,10 +169,10 @@ public class Legemiddelsystem {
 
                 if(type == "a"){
                     System.out.println("Skriv inn hvor sterkt narktosik legemiddelet er:");
-                    styrke = in.nextInt();
+                    styrke = parseInt(in.nextLine());
                 }else if(type == "b"){
                     System.out.println("Skriv inn hvor vanedannende legemiddelet er:");
-                    styrke = in.nextInt();
+                    styrke = parseInt(in.nextLine());
                 }
 
                 leggTilLegemiddel(legemiddelNavn, type, pris, virkestoff, styrke);
@@ -184,7 +183,7 @@ public class Legemiddelsystem {
                 System.out.println("Skriv inn legens navn:");
                 String legeNavn = in.nextLine();
                 System.out.println("Skriv inn legens avtalenummer (0 hvis ingen avtale):");
-                int avtaleNummer = in.nextInt();
+                int avtaleNummer = parseInt(in.nextLine());
 
                 leggTilLege(legeNavn, avtaleNummer);
 
@@ -198,7 +197,7 @@ public class Legemiddelsystem {
                 for(Legemiddel legemiddel : legemidler){
                     System.out.println(legemiddel.hentID() + ": " + legemiddel.hentNavn());
                 }
-                int legemiddelNummer = in.nextInt();
+                int legemiddelNummer = parseInt(in.nextLine());
 
                 System.out.println("Skriv inn navnet på legen:");
                 for(Lege lege : leger){
@@ -210,13 +209,13 @@ public class Legemiddelsystem {
                 for(Pasient pasient : pasienter){
                     System.out.println(pasient.hentID() + ": " + pasient.hentNavn());
                 }
-                int persID = in.nextInt();
+                int persID = parseInt(in.nextLine());
 
                 int reit;
 
                 if(reseptType != "prevensjon"){
                     System.out.println("Skriv inn antall reit:");
-                    reit = in.nextInt();
+                    reit = parseInt(in.nextLine());
                 }else{
                     reit = 3;
                 }
@@ -331,33 +330,43 @@ public class Legemiddelsystem {
 
     private static void brukResept(){
         System.out.println("Hvilken pasient vil du se resepter for?");
-        for(Pasient pasient : pasienter){
-            System.out.println(pasient.hentID() + ": " + pasient.hentNavn() + " (fnr" + pasient.hentFodselnummer() + ")");
-        }
+        int pasientMedReseptNummer = 0;
+        Lenkeliste<Pasient> pasienterMedResept = new Lenkeliste <>();
 
-        int valgtPasientNummer = in.nextInt();
-
-        if(valgtPasientNummer >= 0 && valgtPasientNummer < pasienter.stoerrelse()){
-            Pasient valgtPasient = pasienter.hent(valgtPasientNummer);
-            System.out.println("Valgt pasient: " + valgtPasient.hentNavn() + " (fnr" + valgtPasient.hentFodselnummer() + ")\n" +
-                    "Hvilken resept vil du bruke?");
-
-            int reseptNummer = 0;
-
-            for(Resept resept : valgtPasient.hentResepter()){
-                System.out.println(reseptNummer + ": " + resept.hentLegemiddel().hentNavn() + " (" + resept.hentReit() + " reit)");
-                reseptNummer++;
+        for(Pasient pasient : pasienter) {
+            if (pasient.hentResepter().stoerrelse() > 0) {
+                System.out.println(pasientMedReseptNummer + ": " + pasient.hentNavn() + " (fnr" + pasient.hentFodselnummer() + ")");
+                pasienterMedResept.leggTil(pasient);
+                pasientMedReseptNummer++;
             }
+        }
+        if(pasienterMedResept.stoerrelse() > 0) {
+            int valgtPasientNummer = parseInt(in.nextLine());
 
-            int valgtReseptNummer = in.nextInt();
+            if (valgtPasientNummer >= 0 && valgtPasientNummer < pasienterMedResept.stoerrelse()) {
+                Pasient valgtPasient = pasienterMedResept.hent(valgtPasientNummer);
+                System.out.println("Valgt pasient: " + valgtPasient.hentNavn() + " (fnr" + valgtPasient.hentFodselnummer() + ")\n" +
+                        "Hvilken resept vil du bruke?");
 
-            Resept valgtResept = valgtPasient.hentResepter().hent(valgtReseptNummer);
+                int reseptNummer = 0;
 
-            valgtPasient.brukResept(valgtReseptNummer);
+                for (Resept resept : valgtPasient.hentResepter()) {
+                    System.out.println(reseptNummer + ": " + resept.hentLegemiddel().hentNavn() + " (" + resept.hentReit() + " reit)");
+                    reseptNummer++;
+                }
 
-            System.out.println("Brukte resept paa " + valgtResept.hentLegemiddel().hentNavn() + ". Antall gjenverende reit: " + valgtResept.hentReit());
+                int valgtReseptNummer = parseInt(in.nextLine());
+
+                Resept valgtResept = valgtPasient.hentResepter().hent(valgtReseptNummer);
+
+                valgtPasient.brukResept(valgtReseptNummer);
+
+                System.out.println("Brukte resept paa " + valgtResept.hentLegemiddel().hentNavn() + ". Antall gjenverende reit: " + valgtResept.hentReit());
+            } else {
+                System.out.println("Ikke gyldig pasientnummer, går tilbake til hovedmenyen.");
+            }
         }else{
-            System.out.println("Ikke gyldig pasientnummer, går tilbake til hovedmenyen.");
+            System.out.println("Ingen pasienter har resepter.");
         }
     }
 
