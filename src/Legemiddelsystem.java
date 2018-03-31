@@ -2,6 +2,7 @@ import org.w3c.dom.html.HTMLLegendElement;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -138,7 +139,32 @@ public class Legemiddelsystem {
     }
 
     public static void skrivTilFil(){
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter("innfil.txt");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
+        writer.println("# Pasienter (navn, fnr)");
+        for(Pasient pasient : pasienter){
+            writer.println(pasient.hentInfo());
+        }
+        writer.println("# Legemidler (navn, type, pris, virkestoff [, styrke])");
+        for(Legemiddel legemiddel : legemidler){
+            writer.println(legemiddel.hentInfo());
+        }
+        writer.println("# Leger (navn, avtalenr / 0 hvis ingen avtale)");
+        for(Lege lege : leger){
+            writer.println(lege.hentInfo());
+        }
+        writer.println("# Resepter (type, legemiddelNummer, legeNavn, persID, [reit])");
+        for(Resept resept : resepter){
+            writer.println(resept.hentInfo());
+        }
+
+        writer.close();
+        System.out.println("Data lagret.");
     }
 
     private static void leggTilElementMeny(){

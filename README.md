@@ -10,6 +10,7 @@ Gjøremål på Obligen:
   - [x] D2
   - [x] D3
   - [x] D4
-  - [ ] D5
+  - [x] D5
   - [x] D6
-  - [ ] D7
+  - [x] D7
+- [ ] Clean-up og fiksing av småproblemer
