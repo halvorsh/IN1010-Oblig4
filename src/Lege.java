@@ -1,6 +1,7 @@
 public class Lege implements Comparable<Lege>{
     private String navn;
     private Lenkeliste<Resept> utskrevneResepter;
+    private int narkotiskeLegemidlerUtskrevet;
 
     public Lege(String navn){
         this.navn = navn;
@@ -11,11 +12,18 @@ public class Lege implements Comparable<Lege>{
         return navn;
     }
 
+    public int hentAntallUtskrevneNarkotiskeLegemidler(){
+        return narkotiskeLegemidlerUtskrevet;
+    }
+
     public String hentInfo(){
         return hentNavn() + ", 0";
     }
 
     public void skrivUtResept(Resept resept){
+        if(resept.hentLegemiddel() instanceof LegemiddelA){
+            narkotiskeLegemidlerUtskrevet++;
+        }
         utskrevneResepter.leggTil(resept);
     }
 

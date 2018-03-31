@@ -1,5 +1,8 @@
+import org.w3c.dom.html.HTMLLegendElement;
+
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import static java.lang.Double.parseDouble;
@@ -12,6 +15,9 @@ public class Legemiddelsystem {
     private static Lenkeliste<Resept> resepter;
     private static boolean programmetkjorer = true;
     private static Scanner in;
+
+    private static int vanedannendeLegemidlerUtskrevet = 0;
+    private static int vanedannendeLegemidlerUtskrevetTilMilitaer = 0;
 
     public static void main(String args[]){
         pasienter = new Lenkeliste <>();
@@ -321,6 +327,12 @@ public class Legemiddelsystem {
             }
 
             if(resept != null){
+                if(reseptLegemiddel instanceof LegemiddelB){
+                    vanedannendeLegemidlerUtskrevet++;
+                    if(type == "militaer"){
+                        vanedannendeLegemidlerUtskrevetTilMilitaer++;
+                    }
+                }
                 resepter.leggTil(resept);
                 reseptPasient.nyResept(resept);
                 reseptLege.skrivUtResept(resept);
@@ -358,7 +370,6 @@ public class Legemiddelsystem {
                 int valgtReseptNummer = parseInt(in.nextLine());
 
                 Resept valgtResept = valgtPasient.hentResepter().hent(valgtReseptNummer);
-
                 valgtPasient.brukResept(valgtReseptNummer);
 
                 System.out.println("Brukte resept paa " + valgtResept.hentLegemiddel().hentNavn() + ". Antall gjenverende reit: " + valgtResept.hentReit());
@@ -371,6 +382,27 @@ public class Legemiddelsystem {
     }
 
     public static void statistikk(){
+        System.out.println("Vanedannende legemidler utskrevet: " + vanedannendeLegemidlerUtskrevet);
+        System.out.println("Vanedannende legemidler utskrevet til militaeret: " + vanedannendeLegemidlerUtskrevetTilMilitaer);
 
+        System.out.println("Antall narkotiske legemidler hver lege har skrevet ut:");
+        for(Lege lege : leger){
+            System.out.println(lege.hentNavn() + ": " + lege.hentAntallUtskrevneNarkotiskeLegemidler());
+        }
+
+        System.out.println("Antall gyldige resepter på narkotiske legemidler hver pasient har:");
+        for(Pasient pasient : pasienter){
+            Lenkeliste<Resept> narkotiskeResepter = new Lenkeliste <>();
+
+            for(Resept resept : pasient.hentResepter()){
+                if(resept.hentLegemiddel() instanceof LegemiddelA){
+                    narkotiskeResepter.leggTil(resept);
+                }
+            }
+
+            if(narkotiskeResepter.stoerrelse() > 0){
+                System.out.println(pasient.hentNavn() + ": " + narkotiskeResepter.stoerrelse());
+            }
+        }
     }
 }

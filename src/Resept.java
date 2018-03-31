@@ -38,7 +38,7 @@ public abstract class Resept {
 
     public boolean bruk(){
         reit--;
-        return reit>=0;
+        return reit>0;
     }
 
     public abstract String hentInfo();
