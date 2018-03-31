@@ -24,8 +24,8 @@ public class Pasient {
         return resepter;
     }
 
-    public void brukResept(){
-        if(!resepter.hent(resepter.stoerrelse() -1).bruk()){
+    public void brukResept(int reseptPos){
+        if(!resepter.hent(reseptPos).bruk()){
             resepter.taAv();
         }
     }
@@ -36,6 +36,10 @@ public class Pasient {
 
     public String hentNavn(){
         return navn;
+    }
+
+    public String hentFodselnummer(){
+        return fodselsnummer;
     }
 
     public String hentInfo(){

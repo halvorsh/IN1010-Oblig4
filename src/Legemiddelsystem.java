@@ -24,6 +24,7 @@ public class Legemiddelsystem {
         lesInnFraFil("innfil.txt");
 
         while(programmetkjorer){
+
             System.out.println("\nHva vil du gjore? \n" +
                     "0: Se all data\n" +
                     "1: Legge til et nytt element\n" +
@@ -329,7 +330,35 @@ public class Legemiddelsystem {
     }
 
     private static void brukResept(){
+        System.out.println("Hvilken pasient vil du se resepter for?");
+        for(Pasient pasient : pasienter){
+            System.out.println(pasient.hentID() + ": " + pasient.hentNavn() + " (fnr" + pasient.hentFodselnummer() + ")");
+        }
 
+        int valgtPasientNummer = in.nextInt();
+
+        if(valgtPasientNummer >= 0 && valgtPasientNummer < pasienter.stoerrelse()){
+            Pasient valgtPasient = pasienter.hent(valgtPasientNummer);
+            System.out.println("Valgt pasient: " + valgtPasient.hentNavn() + " (fnr" + valgtPasient.hentFodselnummer() + ")\n" +
+                    "Hvilken resept vil du bruke?");
+
+            int reseptNummer = 0;
+
+            for(Resept resept : valgtPasient.hentResepter()){
+                System.out.println(reseptNummer + ": " + resept.hentLegemiddel().hentNavn() + " (" + resept.hentReit() + " reit)");
+                reseptNummer++;
+            }
+
+            int valgtReseptNummer = in.nextInt();
+
+            Resept valgtResept = valgtPasient.hentResepter().hent(valgtReseptNummer);
+
+            valgtPasient.brukResept(valgtReseptNummer);
+
+            System.out.println("Brukte resept paa " + valgtResept.hentLegemiddel().hentNavn() + ". Antall gjenverende reit: " + valgtResept.hentReit());
+        }else{
+            System.out.println("Ikke gyldig pasientnummer, går tilbake til hovedmenyen.");
+        }
     }
 
     public static void statistikk(){
