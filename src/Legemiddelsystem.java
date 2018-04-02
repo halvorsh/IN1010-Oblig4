@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import static java.lang.Double.parseDouble;
+import static java.lang.Float.parseFloat;
 import static java.lang.Integer.parseInt;
 
 public class Legemiddelsystem {
@@ -193,18 +194,39 @@ public class Legemiddelsystem {
                 System.out.println("Skriv inn legemiddelets type (a = narkotisk, b = vanedannende, c = normalt):");
                 String type = in.nextLine();
                 System.out.println("Skriv inn legemiddelets pris:");
-                float pris = in.nextFloat();
+                float pris;
+                try {
+                    pris = parseFloat(in.nextLine());
+                }catch(NumberFormatException e){
+                    System.out.println("Ikke gyldig input, skriv inn et tall.");
+                    break;
+                }
                 System.out.println("Skriv in mengen virkestoff i mg:");
-                float virkestoff = in.nextFloat();
-
+                float virkestoff;
+                try{
+                    virkestoff = parseFloat(in.nextLine());
+                }catch(NumberFormatException e){
+                    System.out.println("Ikke gyldig input, skriv inn et tall.");
+                    break;
+                }
                 int styrke = 0;
 
                 if(type == "a"){
                     System.out.println("Skriv inn hvor sterkt narktosik legemiddelet er:");
-                    styrke = parseInt(in.nextLine());
+                    try{
+                        styrke = parseInt(in.nextLine());
+                    }catch(NumberFormatException e){
+                        System.out.println("Ikke gyldig input, skriv inn et tall.");
+                        break;
+                    }
                 }else if(type == "b"){
                     System.out.println("Skriv inn hvor vanedannende legemiddelet er:");
+                    try{
                     styrke = parseInt(in.nextLine());
+                    }catch(NumberFormatException e){
+                        System.out.println("Ikke gyldig input, skriv inn et tall.");
+                        break;
+                    }
                 }
 
                 leggTilLegemiddel(legemiddelNavn, type, pris, virkestoff, styrke);
@@ -215,8 +237,13 @@ public class Legemiddelsystem {
                 System.out.println("Skriv inn legens navn:");
                 String legeNavn = in.nextLine();
                 System.out.println("Skriv inn legens avtalenummer (0 hvis ingen avtale):");
-                int avtaleNummer = parseInt(in.nextLine());
-
+                int avtaleNummer;
+                try{
+                    avtaleNummer = parseInt(in.nextLine());
+                }catch(NumberFormatException e){
+                    System.out.println("Ikke gyldig input, skriv inn et tall.");
+                    break;
+                }
                 leggTilLege(legeNavn, avtaleNummer);
 
                 System.out.println("Legen " + legeNavn + " er lagt til.");
@@ -229,8 +256,13 @@ public class Legemiddelsystem {
                 for(Legemiddel legemiddel : legemidler){
                     System.out.println(legemiddel.hentID() + ": " + legemiddel.hentNavn());
                 }
-                int legemiddelNummer = parseInt(in.nextLine());
-
+                int legemiddelNummer;
+                try{
+                    legemiddelNummer = parseInt(in.nextLine());
+                }catch(NumberFormatException e){
+                    System.out.println("Ikke gyldig input, skriv inn et tall.");
+                    break;
+                }
                 System.out.println("Skriv inn navnet på legen:");
                 for(Lege lege : leger){
                     System.out.println(lege.hentNavn());
@@ -241,13 +273,23 @@ public class Legemiddelsystem {
                 for(Pasient pasient : pasienter){
                     System.out.println(pasient.hentID() + ": " + pasient.hentNavn());
                 }
-                int persID = parseInt(in.nextLine());
-
+                int persID;
+                try{
+                    persID = parseInt(in.nextLine());
+                }catch(NumberFormatException e){
+                    System.out.println("Ikke gyldig input, skriv inn et tall.");
+                    break;
+                }
                 int reit;
 
                 if(reseptType != "prevensjon"){
                     System.out.println("Skriv inn antall reit:");
-                    reit = parseInt(in.nextLine());
+                    try{
+                        reit = parseInt(in.nextLine());
+                    }catch(NumberFormatException e){
+                        System.out.println("Ikke gyldig input, skriv inn et tall.");
+                        break;
+                    }
                 }else{
                     reit = 3;
                 }

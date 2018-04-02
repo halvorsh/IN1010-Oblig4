@@ -5,7 +5,7 @@ Gjøremål på Obligen:
 - [x] Oppgave A
 - [x] Oppgave B
 - [x] Oppgave C
-- [ ] Oppgave D
+- [x] Oppgave D
   - [x] D1
   - [x] D2
   - [x] D3
@@ -13,4 +13,4 @@ Gjøremål på Obligen:
   - [x] D5
   - [x] D6
   - [x] D7
-- [ ] Clean-up og fiksing av småproblemer
+- [x] Clean-up og fiksing av småproblemer
