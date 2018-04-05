@@ -17,7 +17,9 @@ public class Pasient {
     }
 
     public void nyResept(Resept resept){
-        resepter.leggPaa(resept);
+        if(resept.hentReit()>0) {
+            resepter.leggPaa(resept);
+        }
     }
 
     public Stabel<Resept> hentResepter(){
@@ -26,7 +28,7 @@ public class Pasient {
 
     public void brukResept(int reseptPos){
         if(!resepter.hent(reseptPos).bruk()){
-            resepter.taAv();
+            resepter.fjern(reseptPos);
         }
     }
 
@@ -46,3 +48,4 @@ public class Pasient {
         return navn + ", " + fodselsnummer;
     }
 }
+

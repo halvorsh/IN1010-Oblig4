@@ -418,7 +418,12 @@ public class Legemiddelsystem {
             }
         }
         if(pasienterMedResept.stoerrelse() > 0) {
-            int valgtPasientNummer = parseInt(in.nextLine());
+            int valgtPasientNummer;
+            try{
+                valgtPasientNummer = parseInt(in.nextLine());
+            }catch(NumberFormatException e){
+                valgtPasientNummer = -1;
+            }
 
             if (valgtPasientNummer >= 0 && valgtPasientNummer < pasienterMedResept.stoerrelse()) {
                 Pasient valgtPasient = pasienterMedResept.hent(valgtPasientNummer);
@@ -432,12 +437,22 @@ public class Legemiddelsystem {
                     reseptNummer++;
                 }
 
-                int valgtReseptNummer = parseInt(in.nextLine());
+                int valgtReseptNummer;
 
-                Resept valgtResept = valgtPasient.hentResepter().hent(valgtReseptNummer);
-                valgtPasient.brukResept(valgtReseptNummer);
+                try{
+                    valgtReseptNummer = parseInt(in.nextLine());
+                }catch(NumberFormatException e){
+                    valgtReseptNummer = -1;
+                }
 
-                System.out.println("Brukte resept paa " + valgtResept.hentLegemiddel().hentNavn() + ". Antall gjenverende reit: " + valgtResept.hentReit());
+                try {
+                    Resept valgtResept = valgtPasient.hentResepter().hent(valgtReseptNummer);
+                    valgtPasient.brukResept(valgtReseptNummer);
+
+                    System.out.println("Brukte resept paa " + valgtResept.hentLegemiddel().hentNavn() + ". Antall gjenverende reit: " + valgtResept.hentReit());
+                }catch(Exception e){
+                    System.out.println("Ikke gyldig input.");
+                }
             } else {
                 System.out.println("Ikke gyldig pasientnummer, går tilbake til hovedmenyen.");
             }
@@ -456,6 +471,7 @@ public class Legemiddelsystem {
         }
 
         System.out.println("Antall gyldige resepter på narkotiske legemidler hver pasient har:");
+        boolean harSkrevetNarkotisk = false;
         for(Pasient pasient : pasienter){
             Lenkeliste<Resept> narkotiskeResepter = new Lenkeliste <>();
 
@@ -465,9 +481,14 @@ public class Legemiddelsystem {
                 }
             }
 
-            if(narkotiskeResepter.stoerrelse() > 0){
+            if(narkotiskeResepter.stoerrelse() > 0) {
                 System.out.println(pasient.hentNavn() + ": " + narkotiskeResepter.stoerrelse());
+                harSkrevetNarkotisk = true;
             }
+        }
+
+        if(!harSkrevetNarkotisk){
+            System.out.println("Ingen har gyldige narkotiske resepter.");
         }
     }
 }
